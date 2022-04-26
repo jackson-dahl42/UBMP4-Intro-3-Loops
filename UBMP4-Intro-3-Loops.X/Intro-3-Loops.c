@@ -19,7 +19,7 @@
 // TODO Set linker code offset to '800' under "Additional options" pull-down.
 
 
-#define A2
+#define A3
 #ifdef originalCode
 // Program variable definitions
 unsigned char TonLED4 = 127;    // LED brightness PWM value
@@ -250,7 +250,9 @@ int main(void)
 }
 #endif
 #ifdef A3
-// Program variable definitions
+
+unsigned char TonLED4 = 0;      // LED brightness PWM value
+unsigned char PWMperiod;        // PWM period counter for PWM loops
 
 int main(void)
 {
@@ -259,7 +261,49 @@ int main(void)
 	
     while(1)
 	{
-        
+        // Turn light off slowly
+        if(SW2 == 0 && LED4 == 1)
+        {
+            for(unsigned char i = 0; i < 255; i ++)
+                {
+                TonLED4 --;
+                for(unsigned char PWMperiod = 255; PWMperiod != 0; PWMperiod --)
+                {
+                    if(TonLED4 == PWMperiod)
+                    {
+                        LED4 = 1;
+                    }
+                __delay_us(20);
+                }
+                LED4 = 0;
+            }
+        }
+
+        // Turn light on slowly
+        if(SW3 == 0 && LED4 == 0)
+        {
+            for(unsigned char i = 0; i < 255; i ++)
+            {
+                TonLED4 ++;
+                for(unsigned char PWMperiod = 255; PWMperiod != 0; PWMperiod --)
+                {
+                    if(TonLED4 == PWMperiod)
+                    {
+                        LED4 = 1;
+                    }
+                __delay_us(20);
+                }
+                if(TonLED4 == 255)
+                {
+                    LED4 = 1;
+                }
+                else
+                {
+                    LED4 = 0;
+                }
+            }
+        }
+
         // Activate bootloader if SW1 is pressed.
         if(SW1 == 0)
         {
@@ -278,6 +322,19 @@ int main(void)
 	
     while(1)
 	{
+        for(unsigned char i = 0; i < 255; i ++)
+        {
+            
+        }
+        for(unsigned char PWMperiod = 255; PWMperiod != 0; PWMperiod --)
+        {
+            if(TonLED4 == PWMperiod)
+            {
+                LED4 = 1;
+            }
+                __delay_us(20);
+                LED4 = 0;
+        }
         
         // Activate bootloader if SW1 is pressed.
         if(SW1 == 0)
