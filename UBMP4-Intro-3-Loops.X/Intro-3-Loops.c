@@ -19,7 +19,7 @@
 // TODO Set linker code offset to '800' under "Additional options" pull-down.
 
 
-#define A3
+#define A5
 #ifdef originalCode
 // Program variable definitions
 unsigned char TonLED4 = 127;    // LED brightness PWM value
@@ -267,16 +267,16 @@ int main(void)
             for(unsigned char i = 0; i < 255; i ++)
                 {
                 TonLED4 --;
-                for(unsigned char PWMperiod = 255; PWMperiod != 0; PWMperiod --)
-                {
-                    if(TonLED4 == PWMperiod)
+                    for(unsigned char PWMperiod = 255; PWMperiod != 0; PWMperiod --)
                     {
-                        LED4 = 1;
+                        if(TonLED4 == PWMperiod)
+                        {
+                            LED4 = 1;
+                        }
+                        __delay_us(20);
                     }
-                __delay_us(20);
-                }
                 LED4 = 0;
-            }
+                }
         }
 
         // Turn light on slowly
@@ -291,18 +291,18 @@ int main(void)
                     {
                         LED4 = 1;
                     }
-                __delay_us(20);
-                }
-                if(TonLED4 == 255)
-                {
-                    LED4 = 1;
-                }
-                else
-                {
-                    LED4 = 0;
+                    __delay_us(20);
+                    }
+                    if(TonLED4 == 255)
+                    {
+                        LED4 = 1;
+                    }
+                    else
+                    {
+                        LED4 = 0;
+                    }
                 }
             }
-        }
 
         // Activate bootloader if SW1 is pressed.
         if(SW1 == 0)
@@ -314,6 +314,10 @@ int main(void)
 #endif
 #ifdef A4
 // Program variable definitions
+// Fix this one
+unsigned char TonLED4 = 255;      // LED brightness PWM value
+unsigned char PWMperiod;        // PWM period counter for PWM loops
+
 
 int main(void)
 {
@@ -322,30 +326,52 @@ int main(void)
 	
     while(1)
 	{
-        for(unsigned char i = 0; i < 255; i ++)
-        {
-            
-        }
-        for(unsigned char PWMperiod = 255; PWMperiod != 0; PWMperiod --)
-        {
-            if(TonLED4 == PWMperiod)
-            {
-                LED4 = 1;
-            }
-                __delay_us(20);
+            for(unsigned char i = 0; i < 255; i ++)
+                {
+                TonLED4 --;
+                    for(unsigned char PWMperiod = 255; PWMperiod != 0; PWMperiod --)
+                    {
+                        if(TonLED4 == PWMperiod)
+                        {
+                            LED4 = 1;
+                        }
+                        __delay_us(20);
+                    }
                 LED4 = 0;
-        }
-        
+                }
+            for(unsigned char i = 0; i < 255; i ++)
+            {
+                TonLED4 ++;
+                for(unsigned char PWMperiod = 255; PWMperiod != 0; PWMperiod --)
+                {
+                    if(TonLED4 == PWMperiod)
+                    {
+                        LED4 = 1;
+                    }
+                    __delay_us(20);
+                    }
+                    if(TonLED4 == 255)
+                    {
+                        LED4 = 1;
+                    }
+                    else
+                    {
+                        LED4 = 0;
+                    }
+                }
+            }
+
         // Activate bootloader if SW1 is pressed.
         if(SW1 == 0)
         {
             RESET();
         }
     }
-}
+
 #endif
 #ifdef A5
 // Program variable definitions
+unsigned int period = 470;
 
 int main(void)
 {
@@ -354,7 +380,30 @@ int main(void)
 	
     while(1)
 	{
-        
+        if(SW2 == 0)
+        {
+        period = 300;
+        for(unsigned char i = 0; i < 20; i++)
+        {
+            period --;
+            for(unsigned char cycles = 50; cycles != 0; cycles--)
+            {
+                BEEPER = !BEEPER;
+                for(unsigned int p = period; p != 0; p--);
+            }
+        }
+        period = 300;
+        for(unsigned char i = 0; i < 20; i++)
+        {
+            period --;
+            for(unsigned char cycles = 50; cycles != 0; cycles--)
+            {
+                BEEPER = !BEEPER;
+                for(unsigned int p = period; p != 0; p--);
+            }
+        }
+
+        }
         // Activate bootloader if SW1 is pressed.
         if(SW1 == 0)
         {
