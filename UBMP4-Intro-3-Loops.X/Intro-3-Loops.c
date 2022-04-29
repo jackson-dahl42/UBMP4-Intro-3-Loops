@@ -144,6 +144,11 @@ int main(void)
 }
 #endif
 #ifdef A1
+// Program that increases and decreases brightness of a light
+// but it stops the light from wrapping, as in the original code
+// had a bug that if you held the button it would increase the 
+// brightness to the max then reset to a brightness of 0.
+// The problem was 255 + 1 = 0 because the char variable wraps
 // Program variable definitions
 unsigned char TonLED4 = 127;    // LED brightness PWM value
 unsigned char PWMperiod;        // PWM period counter for PWM loops
@@ -187,6 +192,7 @@ int main(void)
 }
 #endif
 #ifdef A2
+// Same as the previous activity, but now you can control two lights.
 // Program variable definitions
 unsigned char TonLED4 = 127;    // LED brightness PWM value
 unsigned char TonLED5 = 127;    // LED brightness PWM value
@@ -250,6 +256,8 @@ int main(void)
 }
 #endif
 #ifdef A3
+// A program where when you press the on button the light slowly increases brightness to turn on.
+// When you press the off button the light slowly decreases brightness to turn off. 
 
 unsigned char TonLED4 = 0;      // LED brightness PWM value
 unsigned char PWMperiod;        // PWM period counter for PWM loops
@@ -314,7 +322,11 @@ int main(void)
 #endif
 #ifdef A4
 // Program variable definitions
-// Fix this one
+// This program makes a light pulse. Its slightly broken
+// because to reset the code you need to unplug the UBMP4
+// then hold the SW1, then plug it in, then let go. It should reset.
+// Regardless of the bug it works and I just took the code from the 
+// last activity.
 unsigned char TonLED4 = 255;      // LED brightness PWM value
 unsigned char PWMperiod;        // PWM period counter for PWM loops
 
@@ -371,7 +383,8 @@ int main(void)
 #endif
 #ifdef A5
 // Program variable definitions
-unsigned int period = 470;
+// Makes a chirping or "pew pew" noise by sweeping through a range of frequencies.
+unsigned int period = 120;
 
 int main(void)
 {
@@ -382,20 +395,20 @@ int main(void)
 	{
         if(SW2 == 0)
         {
-        period = 300;
-        for(unsigned char i = 0; i < 20; i++)
+        period = 120;
+        for(unsigned char i = 0; i < 25; i++)
         {
-            period --;
+            period ++;
             for(unsigned char cycles = 50; cycles != 0; cycles--)
             {
                 BEEPER = !BEEPER;
                 for(unsigned int p = period; p != 0; p--);
             }
         }
-        period = 300;
-        for(unsigned char i = 0; i < 20; i++)
+        period = 120;
+        for(unsigned char i = 0; i < 25; i++)
         {
-            period --;
+            period ++;
             for(unsigned char cycles = 50; cycles != 0; cycles--)
             {
                 BEEPER = !BEEPER;
@@ -421,16 +434,17 @@ int main(void)
 
  The "1" in the while(1) is saying the condition is always true, or in other words the loop is on.
  If the statement was while(0) the loop wouldn't run because the conditon is always false. 1 is true
- and 0 is false. The loop while(1) will run indefinitely.
+ and 0 is false. The loop while(1) will run indefinitely because the loop checks if 1 == true.
  * 
  * 2. There is a second 'while(PWMperiod != 0)' loop inside the first while
  *    loop. What condition is being evaluated inside this while statement's
  *    brackets? How many times will the contents of this inner loop run?
 
  The condition that is being evaluated inside the while statement is if the char variable PWMperiod is
- not equal to 0. The while loop will run whenever the variable PWM is not equal to 0. The contents of the loop
- will loop 255 times because the contents of the while loop says to subtract one from PWMperiod each loop. When it
- reaches 0 it will resume the while(1) loop, but then the variable will be set to 255 in the while(1) loop, and the
+ not equal to 0. The while loop will run whenever the variable PWM is not equal to 0. In short it checks
+ if if the variable is equal to 0, if not then it runs the code. The contents of the loop will loop 255 times 
+ because the contents of the while loop says to subtract one from PWMperiod each loop. When it reaches 0 it 
+ will resume the while(1) loop, but then the variable will be set to 255 in the while(1) loop, and the
  while(PWMperiod != 0) will begin again, in essesence it is indefinite.
  * 
  * 3. What condition is being evaluated by the if statement inside the loop?
@@ -439,14 +453,15 @@ int main(void)
 The condition being evaluated in the if statement inside the while(PWMperiod != 0) loop is if (TonLED4 == PWMperiod).
 The if statement checks too see if the variable TonLED4's value is equal to the value of variable PWMperiod. If this 
 statement is true then code is run that makes LED4 turn on.
+
  * 
  * 4. Pressing the up or down buttons (SW3 and SW2) will increase or decrease
  *    the brightness of LED D4 using PWM (Pulse-Width Modulation). How many 
  *    different brightnesses can the LED have? What would the step size of one
  *    brightness level change be if it was expressed as a percentage?
 
- The LED could have 255 different brightnesses as the TonLED4 variable, which controls the brightness, is an 8-bit variable.
- The change in brightness level expressed as a percentage would be 0.004% increase.
+ // The LED could have 256 (0-255) different brightnesses as the TonLED4 variable, which controls the brightness, is an 8-bit variable.
+ The change in brightness level expressed as a percentage would be aproximately 0.3%.
  * 
  * 5. The while loop needs three statements to perform its function. First, the
  *    assignment statement 'PWMperiod = 255;' sets the PWMperiod variable. Next,
@@ -513,6 +528,7 @@ statement is true then code is run that makes LED4 turn on.
 
  When the code is run LED D5 is lit. The value of the global variable PWMperiod is 128.
  The value of the local variable of PWMperiod in the for loop is different however.
+
  * 
  *    Can you remove the global PWMperiod variable definition from the top of 
  *    the program now that PWMperiod is being defined in the for loop?
@@ -549,8 +565,9 @@ statement is true then code is run that makes LED4 turn on.
  * 
  *    What variable type is period? How large a number can this variable hold?
 
- The variable period is an integer period type. The largest postitive integer for a 32-bit int variable
- is 2,147,483,647.
+ The variable period is an integer period type. The largest postitive integer for a 32-bit unsigned int variable
+ is 2^32-1 (subtract one because of the 0). Therefore the highest number and unsigned int can hold is
+ 4,294,967,295.
 
  * 
  * 8. Why is period copied to the local variable p inside the inner for loop?
